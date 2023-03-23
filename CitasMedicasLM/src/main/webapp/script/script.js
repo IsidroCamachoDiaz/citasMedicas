@@ -55,12 +55,15 @@ class interfazCitaMedica{
 		return bd;
 	}
 	
-	static listarAlumno(bd){
+	static listarCitas(bd){
 		//Si no esta vacia
 		if(bd.length!=0){
 			//Se recorre el Array
-			for(var i=0;i<bd.length;i++) 
-				alert("ID del Alumno:"+bd[i].idAlumno+"\nNombre del Alumno: "+bd[i].nombre+"\nApellidos del Alumno: "+bd[i].apellidos+"\nTelefono del Alumno: "+bd[i].telefono+"\nID del Portatil: "+bd[i].idPortatil);
+			var idPacienteListar=prompt("Indique su id de paciente:");
+			for(var e=0;e<bd.length;e++){
+				if(bd[e].idPaciente==idPacienteListar)
+					alert("ID de Cita: "+bd[e].idCIta+"\n Nombre del Paciente: "+bd[e].nombre+"\nApellidos del Paciente: "+bd[e].apellidos)
+			}
 		}
 		else
 			alert("No hay ningun alumno");
