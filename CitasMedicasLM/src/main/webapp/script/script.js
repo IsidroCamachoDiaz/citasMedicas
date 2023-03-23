@@ -14,7 +14,7 @@ class citaMedica{
 
 class interfazCitaMedica{
 
-	static matriculaAlumno(bd){
+	static pedirCita(bd){
 		var idCita=InterfazID.calculaid(bd);
 		var idPaciente =Number(prompt("Introduzca su identificador de seguridad social:"));
 		var nombre =prompt("Introduzca su nombre:");
@@ -22,41 +22,39 @@ class interfazCitaMedica{
 		var centro =prompt("Introduzca el centro medico:");
 		var consulta =prompt("Introduzca la consulta del medico");
 		var nombreMedico =prompt("Introduzca el nombre del medico:");
-		var diaCita =prompt("Introduzca el nombre del medico:");
-		var mesCita =prompt("Introduzca el nombre del medico:");
-		var anyoCita =prompt("Introduzca el nombre del medico:");
-		var diaCita = new Date();
-		bd.push(alumno)
+		var diaCita =prompt("Introduzca el dia de la cita:");
+		var mesCita =prompt("Introduzca el mes de la cita:");
+		var anyoCita =prompt("Introduzca el año de la cita:");
+		var fechaCita = new Date(anyoCita,mesCita-1,diaCita);
+		var cita= new citaMedica(idCita,idPaciente,nombre,apellidos,centro,consulta,nombreMedico,fechaCita);
+		bd.push(cita)
 		return bd;
 	}
 
-
-
-
-	static borrarAlumno(bd){
+	static borrarCiIta(bd){
 		//Si esta vacia no entra
 		if(bd.length!=0){
-		var borrar =prompt("Introduzca el id del Alumno:");
+		var borrar =prompt("Introduzca el id de la Cita Medica:");
 		var borrado =false;
 		//Se recorre la lista
 		for(var i=0;i<bd.length;i++){
 			//Si coincide borra el alumno
-			if(bd[i].idAlumno==borrar){
+			if(bd[i].idCIta==borrar){
 				bd.splice(i, 1)
 				borrado=true;
 			}
 		}
 		//Si no lo encontro
 		if(!borrado)
-			alert("No se encontro al alumno");
+			alert("No se encontro la cita medica");
 		return bd;
 		}
 		//Si esta vacia
 		else
-			alert("No hay ningun alumno");
+			alert("No hay ninguna cita");
 		return bd;
 	}
-
+	
 	static listarAlumno(bd){
 		//Si no esta vacia
 		if(bd.length!=0){
@@ -80,7 +78,7 @@ class InterfazID{
 		var id=0;
 		//Se reccore la lista para comprobar que id tienen y darles el siguiente
 			 for(var i=0;i<bd.length;i++) {
-				 var j=bd[i].idAlumno;
+				 var j=bd[i].idCita;
 				 if(id<j)
 					 id=j;
 			 }
