@@ -25,13 +25,13 @@ class interfazCitaMedica{
 		var diaCita =prompt("Introduzca el dia de la cita:");
 		var mesCita =prompt("Introduzca el mes de la cita:");
 		var anyoCita =prompt("Introduzca el año de la cita:");
-		var fechaCita = new Date(anyoCita,mesCita-1,diaCita);
+		var fechaCita = InterfazFecha.calculaFecha(anyoCita,mesCita-1,diaCita);
 		var cita= new citaMedica(idCita,idPaciente,nombre,apellidos,centro,consulta,nombreMedico,fechaCita);
 		bd.push(cita)
 		return bd;
 	}
 
-	static borrarCiIta(bd){
+	static borrarCita(bd){
 		//Si esta vacia no entra
 		if(bd.length!=0){
 		var borrar =prompt("Introduzca el id de la Cita Medica:");
@@ -92,21 +92,39 @@ class InterfazID{
 			return 0;
 	}
 }
-
+class InterfazFecha{
+	static calculaFecha(anyo,mes,dia){
+		var fechaHoy = new Date();
+		do{
+			if(anyo<fechaHoy.getDate)
+			prompt("Error Introdujo un año ya pasado\nIntroduzca el año de la cita:");
+			if(mes<1||mes>12)
+				prompt("Error Introdujo un mes no valido\nIntroduzca el mes de la cita:");
+			if(anyo%4!=0 &&(dia>28||dia<1))
+				prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:");
+			if(dia<1||dia>31&&(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12))
+				prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:");
+			if(dia<1||dia>30&&(mes==4||mes==6||mes==9||mes==10))
+				prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:");
+		}while((anyo<fechaHoy.getDate)||(mes<1||mes>12)||(anyo%4!=0 &&(dia>28||dia<1))||(dia<1||dia>31&&(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12))||(dia<1||dia>30&&(mes==4||mes==6||mes==9||mes==10)));
+		var fechaBien = new Date(anyo,mes,dia)
+		return fechaBien;
+	}
+}
 function Main(){
  var bd=[];
  do{
- var opcion =Number(prompt("1-Matricular Alumno\n2-Borrar Alumno\n3-Listar Alumno\n0-Salir\n Introduzca una opcion:"));
+ var opcion =Number(prompt("1-Pedir Cita\n2-Borrar Cita\n3-Listar Citas\n0-Salir\n Introduzca una opcion:"));
  
  	switch(opcion){
 		case 1:
-			 interfazPortatil.matriculaAlumno(bd);
+			 interfazCitaMedica.pedirCita(bd);
 			 break;
 		case 2:
-			 interfazPortatil.borrarAlumno(bd);
+			 interfazCitaMedica.borrarCita(bd);
 			 break;
 		case 3:
-			interfazPortatil.listarAlumno(bd);
+			interfazCitaMedica.listarCitas(bd);
 			break;
 	 }
 
