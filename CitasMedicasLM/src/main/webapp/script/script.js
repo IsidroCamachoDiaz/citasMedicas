@@ -25,13 +25,13 @@ class interfazCitaMedica{
 		var centro;
 		var consulta;
 		var nombreMedico;
-		if(idPaciente<3000)
+		if(idPaciente<3000&&idPaciente>2000)
 		{
 		centro="Retiro";
 		consulta=3;
 		nombreMedico="Marta Sanchez"
 		}
-		if(idPaciente<2000)
+		if(idPaciente<2000&&idPaciente>1000)
 		{
 		centro="Macarena";
 		consulta=8;
