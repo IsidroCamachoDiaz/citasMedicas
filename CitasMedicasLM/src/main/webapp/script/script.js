@@ -15,18 +15,50 @@ class citaMedica{
 class interfazCitaMedica{
 
 	static pedirCita(bd){
-		var idCita=InterfazID.calculaid(bd);
+		//Pedimos los valores
+		var idCita=Number(InterfazID.calculaid(bd));
 		var idPaciente =Number(prompt("Introduzca su identificador de seguridad social:"));
 		var nombre =prompt("Introduzca su nombre:");
-		var apellidos =prompt("Introduzca sus apellidos:");
-		var centro =prompt("Introduzca el centro medico:");
-		var consulta =prompt("Introduzca la consulta del medico");
-		var nombreMedico =prompt("Introduzca el nombre del medico:");
-		var diaCita =prompt("Introduzca el dia de la cita:");
-		var mesCita =prompt("Introduzca el mes de la cita:");
-		var anyoCita =prompt("Introduzca el año de la cita:");
-		var fechaCita = InterfazFecha.calculaFecha(anyoCita,mesCita-1,diaCita);
+		var apellidos =prompt("Introduzca sus apellidos:")
+		//---------------------------------------------------------
+		//Al no haber base de datos creo datos ficticios depedinedo del numero del paciente
+		var centro;
+		var consulta;
+		var nombreMedico;
+		if(idPaciente<3000)
+		{
+		centro="Retiro";
+		consulta=3;
+		nombreMedico="Marta Sanchez"
+		}
+		if(idPaciente<2000)
+		{
+		centro="Macarena";
+		consulta=8;
+		nombreMedico="Carlos Hernandez"
+		}
+		if(idPaciente<1000)
+		{
+		centro="Triana";
+		consulta=6;
+		nombreMedico="Pablo Fernandez"
+		}
+		else
+		{
+		centro="Fatima";
+		consulta=4;
+		nombreMedico="Marco Perez"	
+		}
+		//---------------------------------------------------------
+		var hora =Number(prompt("Introduzca la hora de la cita:"));
+		var diaCita =Number(prompt("Introduzca el dia de la cita:"));
+		var mesCita =Number(prompt("Introduzca el mes de la cita:"));
+		var anyoCita =Number(prompt("Introduzca el anyo de la cita:"));
+		//Comprabamos que haya metido la fecha correctamente 
+		var fechaCita = InterfazFecha.calculaFecha(anyoCita,mesCita,diaCita,hora);
+		//Creamos la cita
 		var cita= new citaMedica(idCita,idPaciente,nombre,apellidos,centro,consulta,nombreMedico,fechaCita);
+		//Metemos la cita en la base de datos
 		bd.push(cita)
 		return bd;
 	}
@@ -34,12 +66,12 @@ class interfazCitaMedica{
 	static borrarCita(bd){
 		//Si esta vacia no entra
 		if(bd.length!=0){
-		var borrar =prompt("Introduzca el id de la Cita Medica:");
+		var borrar =Number(prompt("Introduzca el id de la Cita Medica:"));
 		var borrado =false;
 		//Se recorre la lista
 		for(var i=0;i<bd.length;i++){
 			//Si coincide borra el alumno
-			if(bd[i].idCIta==borrar){
+			if(bd[i].idCita==borrar){
 				bd.splice(i, 1)
 				borrado=true;
 			}
@@ -62,18 +94,18 @@ class interfazCitaMedica{
 			var idPacienteListar=prompt("Indique su id de paciente:");
 			for(var e=0;e<bd.length;e++){
 				if(bd[e].idPaciente==idPacienteListar)
-					alert("ID de Cita: "+bd[e].idCIta+"\n Nombre del Paciente: "+bd[e].nombre+"\nApellidos del Paciente: "+bd[e].apellidos)
+					alert("ID de Cita: "+bd[e].idCita+"\n Nombre del Paciente: "+bd[e].nombre_paciente+"\nApellidos del Paciente: "+bd[e].apellidos_paciente+"\nFecha de la cita: "+bd[e].fechaCita+"\nMedico de la cita: "+bd[e].nombre_Medico+"\nCentro de la cita: "+bd[e].centro_medico+"\nConsulta de la cita: "+bd[e].consulta)
 			}
 		}
 		else
-			alert("No hay ningun alumno");
+			alert("No hay ninguna cita");
 	}
 	
 }
 
 class InterfazID{
 	/**
-	 * Calcula el id del Alumno a partir del Array
+	 * Calcula el id de la cita a partir del Array
 	 */
 	static calculaid(bd){
 		//Si no esta vacia
@@ -93,21 +125,31 @@ class InterfazID{
 	}
 }
 class InterfazFecha{
-	static calculaFecha(anyo,mes,dia){
-		var fechaHoy = new Date();
+	/**
+	 * Comprueba la fecha introducido este bien
+	 */
+	static calculaFecha(anyo,mes,dia,hora){
 		do{
-			if(anyo<fechaHoy.getDate)
-			prompt("Error Introdujo un año ya pasado\nIntroduzca el año de la cita:");
+			if(hora<8||hora>22)
+			hora=Number(prompt("Error Introdujo una hora incorrecta\nIntroduzca ela hora de la cita:"));
+			if(anyo<2023)
+			anyo=Number(prompt("Error Introdujo un anyo ya pasado\nIntroduzca el anyo de la cita:"));
 			if(mes<1||mes>12)
-				prompt("Error Introdujo un mes no valido\nIntroduzca el mes de la cita:");
-			if(anyo%4!=0 &&(dia>28||dia<1))
-				prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:");
-			if(dia<1||dia>31&&(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12))
-				prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:");
-			if(dia<1||dia>30&&(mes==4||mes==6||mes==9||mes==10))
-				prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:");
-		}while((anyo<fechaHoy.getDate)||(mes<1||mes>12)||(anyo%4!=0 &&(dia>28||dia<1))||(dia<1||dia>31&&(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12))||(dia<1||dia>30&&(mes==4||mes==6||mes==9||mes==10)));
-		var fechaBien = new Date(anyo,mes,dia)
+				mes=Number(prompt("Error Introdujo un mes no valido\nIntroduzca el mes de la cita:"));
+			if(dia<1||dia>31)
+				dia=Number(prompt("Error Introdujo un dia no valido\nIntroduzca el mes de la cita:"));
+			else{
+				if(anyo%4!=0 && dia>28)
+					dia=Number(prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:"));
+				if(dia>31&&(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12))
+					dia=Number(prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:"));
+				if(dia>30&&(mes==4||mes==6||mes==9||mes==10))
+					dia=Number(prompt("Error Introdujo un dia no valido\nIntroduzca el dia de la cita:"));
+				}
+				
+		}while((hora<8||hora>22)||(anyo<2023)||(mes<1||mes>12)||(anyo%4!=0 &&dia>28)||(dia>31&&(mes==1||mes==3||mes==5||mes==7||mes==8||mes==10||mes==12))||(dia>30&&(mes==4||mes==6||mes==9||mes==10)||dia<1||dia>31));
+		//Se crea la el tipo fecha y lo devuelve
+		var fechaBien = new Date(anyo,mes-1,dia,hora)
 		return fechaBien;
 	}
 }
